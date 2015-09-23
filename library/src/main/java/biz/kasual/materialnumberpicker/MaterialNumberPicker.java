@@ -116,7 +116,7 @@ public class MaterialNumberPicker extends NumberPicker {
     }
 
     /**
-     * Uses reflection to access text color private attribute for both wheel and edit text inside the number picker
+     * Uses reflection to access text color private attribute for both wheel and edit text inside the number picker.
      * By default uses the colorPrimaryText but it's a shame to have to override the value whereas simple accessors would have been perfect
      */
     public void setTextColor(int textColor) {
