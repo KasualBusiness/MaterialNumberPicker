@@ -17,6 +17,7 @@
 package biz.kasual.materialnumberpicker;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -28,6 +29,9 @@ import android.widget.NumberPicker;
 
 import java.lang.reflect.Field;
 
+/**
+ * Created by Stephen Vinouze on 22/09/2015.
+ */
 public class MaterialNumberPicker extends NumberPicker {
 
     private Builder mBuilder;
@@ -51,11 +55,11 @@ public class MaterialNumberPicker extends NumberPicker {
 
         mBuilder = builder;
 
-        setBackgroundColor(builder.backgroundColor);
         setMinValue(builder.minValue);
         setMaxValue(builder.maxValue);
         setValue(builder.defaultValue);
         setFormatter(builder.formatter);
+        setBackgroundColor(builder.backgroundColor);
         setSeparatorColor(builder.separatorColor);
         setTextColor(builder.textColor);
         setWrapSelectorWheel(builder.wrapSelectorWheel);
@@ -148,14 +152,14 @@ public class MaterialNumberPicker extends NumberPicker {
     public static class Builder {
         private Context context;
         private Formatter formatter;
-        private int backgroundColor;
-        private int textColor;
-        private int separatorColor;
-        private int minValue;
-        private int maxValue;
-        private int defaultValue;
-        private boolean enableFocusability;
-        private boolean wrapSelectorWheel;
+        private int backgroundColor = Color.WHITE;
+        private int textColor = Color.BLACK;
+        private int separatorColor = Color.TRANSPARENT;
+        private int minValue = 1;
+        private int maxValue = 10;
+        private int defaultValue = 1;
+        private boolean enableFocusability = false;
+        private boolean wrapSelectorWheel = false;
 
         public Builder(@NonNull Context context) {
             this.context = context;
@@ -211,4 +215,5 @@ public class MaterialNumberPicker extends NumberPicker {
         }
 
     }
+
 }
