@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/main_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -18,16 +19,16 @@
     <Button
         android:id="@+id/default_number_picker_button"
         style="@style/Button"
-        android:text="Default picker"/>
+        android:text="@string/alert_default_title"/>
 
     <Button
         android:id="@+id/simple_number_picker_button"
         style="@style/Button"
-        android:text="Simple picker"/>
+        android:text="@string/alert_simple_title"/>
 
     <Button
         android:id="@+id/custom_number_picker_button"
         style="@style/Button"
-        android:text="Custom picker"/>
+        android:text="@string/alert_custom_title"/>
 
 </LinearLayout>
