@@ -1,6 +1,8 @@
 # MaterialNumberPicker
 MaterialNumberPicker intends to give you more flexibility than the native NumberPicker. As many Android developers complained about this component since it was released, this library allows you to access some most wanted private attributes through reflection so that you could easily customize your NumberPicker. Finally, we built on top of it a pattern builder for flexibility reasons.
 
+![alt tag](images/picker_presentation.png)
+
 ## Download
 
 The easiest way to add this library to your Android project is to add this line to your `build.gradle` file
