@@ -30,6 +30,21 @@ MaterialNumberPicker numberPicker = new MaterialNumberPicker.Builder(context)
                 .build();
 ```
 
+It is up to you how you want to dislpay the picker. A good practise would be to display it inside a Dialod:
+
+````
+new AlertDialog.Builder(this)
+                .setTitle(yourTitle)
+                .setView(numberPicker)
+                .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Snackbar.make(findViewById(R.id.your_container), "You picked : " + numberPicker.getValue(), Snackbar.LENGTH_LONG).show();
+                    }
+                })
+                .show();
+```
+
 By default there is no formatter when you build your number picker but you can easily add one using the `formatter` proprety.
 
 ## License
