@@ -30,7 +30,7 @@ MaterialNumberPicker numberPicker = new MaterialNumberPicker.Builder(context)
                 .build();
 ```
 
-It is up to you how you want to dislpay the picker. A good practise would be to display it inside a Dialod:
+It is up to you how you want to display the picker. A good practise would be to display it inside an AlertDialog:
 
 ````
 new AlertDialog.Builder(this)
