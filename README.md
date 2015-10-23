@@ -1,17 +1,29 @@
 # MaterialNumberPicker
-MaterialNumberPicker intends to give you more flexibility than the native NumberPicker. As many Android developers complained about this component since it was released, this library allows you to access some most wanted private attributes through reflection so that you could easily customize your NumberPicker. Finally, we built on top of it a pattern builder for flexibility reasons.
+MaterialNumberPicker intends to give you more flexibility than the Holo NumberPicker that only comes with two themes for customization. As many Android developers complained about this component since it was released, this library allows you to access some most wanted private attributes through reflection so that you could easily customize your NumberPicker. Finally, we built on top of it a builder pattern for flexibility reasons.
 
 ![alt tag](images/picker_presentation.png)
 
 ## Download
+MaterialNumberPicker requires at minimum Android 3.0, same as the native NumberPicker.
 
-The easiest way to add this library to your Android project is to add this line to your `build.gradle` file
+Gradle:
 
 ``
 compile 'biz.kasual:materialnumberpicker:1.1.0'
 ``
 
-MaterialNumberPicker requires at minimum Android 3.0, same as the native NumberPicker.
+Maven:
+
+```
+<dependency>
+  <groupId>biz.kasual</groupId>
+  <artifactId>materialnumberpicker</artifactId>
+  <version>1.1.0</version>
+  <type>aar</type>
+</dependency>
+```
+
+Eclipse: [materialnumberpicker-1.1.0.aar](https://github.com/KasualBusiness/MaterialNumberPicker/releases/download/1.1.0/materialnumberpicker-1.1.0.aar)
 
 ## Usage
 
