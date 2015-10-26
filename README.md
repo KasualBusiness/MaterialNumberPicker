@@ -18,12 +18,12 @@ Maven:
 <dependency>
   <groupId>biz.kasual</groupId>
   <artifactId>materialnumberpicker</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <type>aar</type>
 </dependency>
 ```
 
-Eclipse: [materialnumberpicker-1.1.0.aar](https://github.com/KasualBusiness/MaterialNumberPicker/releases/download/1.1.0/materialnumberpicker-1.1.0.aar)
+Eclipse: [materialnumberpicker-1.1.1.aar](https://github.com/KasualBusiness/MaterialNumberPicker/releases/download/1.1.1/materialnumberpicker-1.1.1.aar)
 
 ## Usage
 
