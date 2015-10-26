@@ -55,8 +55,6 @@ public class MaterialNumberPicker extends NumberPicker {
         initView();
 
         mBuilder = builder;
-        mTextColor = builder.textColor;
-        mTextSize = builder.textSize;
 
         setMinValue(builder.minValue);
         setMaxValue(builder.maxValue);
@@ -64,9 +62,10 @@ public class MaterialNumberPicker extends NumberPicker {
         setFormatter(builder.formatter);
         setBackgroundColor(builder.backgroundColor);
         setSeparatorColor(builder.separatorColor);
+        setTextColor(builder.textColor);
+        setTextSize(builder.textSize);
         setWrapSelectorWheel(builder.wrapSelectorWheel);
         setFocusability(builder.enableFocusability);
-        updateTextAttributes();
     }
 
     public final Builder getBuilder() {
@@ -124,9 +123,21 @@ public class MaterialNumberPicker extends NumberPicker {
 
     /**
      * Uses reflection to access text color private attribute for both wheel and edit text inside the number picker.
-     * By default uses the colorPrimaryText but it's a shame to have to override the value whereas simple accessors would have been perfect
      */
-    public void updateTextAttributes() {
+    public void setTextColor(int textColor) {
+        mTextColor = textColor;
+        updateTextAttributes();
+    }
+
+    /**
+     * Uses reflection to access text size private attribute for both wheel and edit text inside the number picker.
+     */
+    public void setTextSize(int textSize) {
+        mTextSize = textSize;
+        updateTextAttributes();
+    }
+
+    private void updateTextAttributes() {
         for (int i = 0; i < getChildCount(); i++){
             View child = getChildAt(i);
             if (child instanceof EditText) {

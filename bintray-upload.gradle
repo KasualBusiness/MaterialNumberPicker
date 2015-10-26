@@ -13,11 +13,15 @@ bintray {
         name = POM_NAME
         repo = POM_REPO
         desc = POM_DESCRIPTION
+        vcsUrl = POM_VCS_URL
         licenses = ['Apache-2.0']
         publicDownloadNumbers = true
         version {
             name = VERSION_NAME
             desc = POM_DESCRIPTION
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+            }
         }
     }
 }
@@ -32,7 +36,7 @@ install {
                 url POM_URL
 
                 scm {
-                    url POM_SCM_URL
+                    url POM_URL
                     connection POM_SCM_CONNECTION
                     developerConnection POM_SCM_DEV_CONNECTION
                 }
