@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .defaultValue(10)
                         .separatorColor(ContextCompat.getColor(this, R.color.colorAccent))
                         .textColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                        .textSize(25)
                         .formatter(new NumberPicker.Formatter() {
                             @Override
                             public String format(int value) {
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         new AlertDialog.Builder(this)
                 .setTitle(alertTitle)
                 .setView(picker)
+                .setNegativeButton(getString(android.R.string.cancel), null)
                 .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

@@ -36,6 +36,7 @@ public class MaterialNumberPicker extends NumberPicker {
 
     private Builder mBuilder;
     private int mTextColor;
+    private int mTextSize;
     private int mSeparatorColor;
     private boolean mEnableFocusability;
 
@@ -54,6 +55,8 @@ public class MaterialNumberPicker extends NumberPicker {
         initView();
 
         mBuilder = builder;
+        mTextColor = builder.textColor;
+        mTextSize = builder.textSize;
 
         setMinValue(builder.minValue);
         setMaxValue(builder.maxValue);
@@ -61,9 +64,9 @@ public class MaterialNumberPicker extends NumberPicker {
         setFormatter(builder.formatter);
         setBackgroundColor(builder.backgroundColor);
         setSeparatorColor(builder.separatorColor);
-        setTextColor(builder.textColor);
         setWrapSelectorWheel(builder.wrapSelectorWheel);
         setFocusability(builder.enableFocusability);
+        updateTextAttributes();
     }
 
     public final Builder getBuilder() {
@@ -123,17 +126,22 @@ public class MaterialNumberPicker extends NumberPicker {
      * Uses reflection to access text color private attribute for both wheel and edit text inside the number picker.
      * By default uses the colorPrimaryText but it's a shame to have to override the value whereas simple accessors would have been perfect
      */
-    public void setTextColor(int textColor) {
-        mTextColor = textColor;
-
+    public void updateTextAttributes() {
         for (int i = 0; i < getChildCount(); i++){
             View child = getChildAt(i);
             if (child instanceof EditText) {
                 try {
                     Field selectorWheelPaintField = NumberPicker.class.getDeclaredField("mSelectorWheelPaint");
                     selectorWheelPaintField.setAccessible(true);
-                    ((Paint)selectorWheelPaintField.get(this)).setColor(textColor);
-                    ((EditText)child).setTextColor(textColor);
+
+                    Paint wheelPaint = ((Paint)selectorWheelPaintField.get(this));
+                    wheelPaint.setColor(mTextColor);
+                    wheelPaint.setTextSize(spToPixels(getContext(), mTextSize));
+
+                    EditText editText = ((EditText) child);
+                    editText.setTextColor(mTextColor);
+                    editText.setTextSize(mTextSize);
+
                     invalidate();
                     break;
                 }
@@ -149,12 +157,18 @@ public class MaterialNumberPicker extends NumberPicker {
         setDescendantFocusability(isFocusable ? FOCUS_AFTER_DESCENDANTS : FOCUS_BLOCK_DESCENDANTS);
     }
 
+    private float spToPixels(Context context, float sp) {
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        return sp*scaledDensity;
+    }
+
     public static class Builder {
         private Context context;
         private Formatter formatter;
         private int backgroundColor = Color.WHITE;
-        private int textColor = Color.BLACK;
         private int separatorColor = Color.TRANSPARENT;
+        private int textColor = Color.BLACK;
+        private int textSize = 20;
         private int minValue = 1;
         private int maxValue = 10;
         private int defaultValue = 1;
@@ -175,13 +189,18 @@ public class MaterialNumberPicker extends NumberPicker {
             return this;
         }
 
+        public Builder separatorColor(int separatorColor) {
+            this.separatorColor = separatorColor;
+            return this;
+        }
+
         public Builder textColor(int textColor) {
             this.textColor = textColor;
             return this;
         }
 
-        public Builder separatorColor(int separatorColor) {
-            this.separatorColor = separatorColor;
+        public Builder textSize(int textSize) {
+            this.textSize = textSize;
             return this;
         }
 
