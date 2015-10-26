@@ -9,7 +9,7 @@ MaterialNumberPicker requires at minimum Android 3.0, same as the native NumberP
 Gradle:
 
 ``
-compile 'biz.kasual:materialnumberpicker:1.1.0'
+compile 'biz.kasual:materialnumberpicker:1.1.1'
 ``
 
 Maven:
@@ -37,6 +37,7 @@ MaterialNumberPicker numberPicker = new MaterialNumberPicker.Builder(context)
                 .backgroundColor(Color.WHITE)
                 .separatorColor(Color.TRANSPARENT)
                 .textColor(Color.BLACK)
+                .textSize(20)
                 .enableFocusability(false)
                 .wrapSelectorWheel(true)
                 .build();
