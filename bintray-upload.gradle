@@ -14,6 +14,7 @@ bintray {
         repo = POM_REPO
         desc = POM_DESCRIPTION
         vcsUrl = POM_VCS_URL
+        userOrg = "kasualbusiness"
         licenses = ['Apache-2.0']
         publicDownloadNumbers = true
         version {

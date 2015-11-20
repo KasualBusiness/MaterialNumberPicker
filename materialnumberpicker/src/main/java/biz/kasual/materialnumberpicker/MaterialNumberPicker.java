@@ -17,6 +17,7 @@
 package biz.kasual.materialnumberpicker;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
@@ -34,9 +35,17 @@ import java.lang.reflect.Field;
  */
 public class MaterialNumberPicker extends NumberPicker {
 
+    private static final int MIN_VALUE = 1;
+    private static final int MAX_VALUE = 10;
+    private static final int DEFAULT_VALUE = 1;
+    private static final float TEXT_SIZE = 20.f;
+    private static final int TEXT_COLOR = Color.BLACK;
+    private static final int BACKGROUND_COLOR = Color.WHITE;
+    private static final int SEPARATOR_COLOR = Color.TRANSPARENT;
+
     private Builder mBuilder;
     private int mTextColor;
-    private int mTextSize;
+    private float mTextSize;
     private int mSeparatorColor;
     private boolean mEnableFocusability;
 
@@ -48,6 +57,39 @@ public class MaterialNumberPicker extends NumberPicker {
     public MaterialNumberPicker(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         initView();
+
+        TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.MaterialNumberPicker);
+
+        for (int i = 0; i < a.getIndexCount(); ++i) {
+
+            int attr = a.getIndex(i);
+            if (attr == R.styleable.MaterialNumberPicker_npMinValue) {
+                setMinValue(a.getInt(attr, MIN_VALUE));
+            }
+            else if (attr == R.styleable.MaterialNumberPicker_npMaxValue) {
+                setMaxValue(a.getInt(attr, MAX_VALUE));
+            }
+            else if (attr == R.styleable.MaterialNumberPicker_npDefaultValue) {
+                setValue(a.getInt(attr, DEFAULT_VALUE));
+            }
+            else if (attr == R.styleable.MaterialNumberPicker_npTextSize) {
+                setTextSize(a.getDimension(attr, TEXT_SIZE));
+            }
+            else if (attr == R.styleable.MaterialNumberPicker_npTextColor) {
+                setTextColor(a.getColor(attr, TEXT_COLOR));
+            }
+            else if (attr == R.styleable.MaterialNumberPicker_npSeparatorColor) {
+                setSeparatorColor(a.getColor(attr, SEPARATOR_COLOR));
+            }
+            else if (attr == R.styleable.MaterialNumberPicker_npFocusValue) {
+                setFocusability(a.getBoolean(attr, false));
+            }
+            else if (attr == R.styleable.MaterialNumberPicker_npWrapValue) {
+                setWrapSelectorWheel(a.getBoolean(attr, false));
+            }
+        }
+
+        a.recycle();
     }
 
     public MaterialNumberPicker(Builder builder) {
@@ -63,7 +105,7 @@ public class MaterialNumberPicker extends NumberPicker {
         setBackgroundColor(builder.backgroundColor);
         setSeparatorColor(builder.separatorColor);
         setTextColor(builder.textColor);
-        setTextSize(builder.textSize);
+        setTextSize(spToPixels(getContext(), builder.textSize));
         setWrapSelectorWheel(builder.wrapSelectorWheel);
         setFocusability(builder.enableFocusability);
     }
@@ -90,6 +132,16 @@ public class MaterialNumberPicker extends NumberPicker {
      * This is still an open Google @see <a href="https://code.google.com/p/android/issues/detail?id=35482#c9">issue</a> from 2012
      */
     private void initView() {
+        setMinValue(MIN_VALUE);
+        setMaxValue(MAX_VALUE);
+        setValue(DEFAULT_VALUE);
+        setBackgroundColor(BACKGROUND_COLOR);
+        setSeparatorColor(SEPARATOR_COLOR);
+        setTextColor(TEXT_COLOR);
+        setTextSize(TEXT_SIZE);
+        setWrapSelectorWheel(false);
+        setFocusability(false);
+
         try {
             Field f = NumberPicker.class.getDeclaredField("mInputText");
             f.setAccessible(true);
@@ -132,7 +184,7 @@ public class MaterialNumberPicker extends NumberPicker {
     /**
      * Uses reflection to access text size private attribute for both wheel and edit text inside the number picker.
      */
-    public void setTextSize(int textSize) {
+    public void setTextSize(float textSize) {
         mTextSize = textSize;
         updateTextAttributes();
     }
@@ -147,11 +199,11 @@ public class MaterialNumberPicker extends NumberPicker {
 
                     Paint wheelPaint = ((Paint)selectorWheelPaintField.get(this));
                     wheelPaint.setColor(mTextColor);
-                    wheelPaint.setTextSize(spToPixels(getContext(), mTextSize));
+                    wheelPaint.setTextSize(mTextSize);
 
                     EditText editText = ((EditText) child);
                     editText.setTextColor(mTextColor);
-                    editText.setTextSize(mTextSize);
+                    editText.setTextSize(pixelsToSp(getContext(), mTextSize));
 
                     invalidate();
                     break;
@@ -168,21 +220,24 @@ public class MaterialNumberPicker extends NumberPicker {
         setDescendantFocusability(isFocusable ? FOCUS_AFTER_DESCENDANTS : FOCUS_BLOCK_DESCENDANTS);
     }
 
+    private float pixelsToSp(Context context, float px) {
+        return px / context.getResources().getDisplayMetrics().scaledDensity;
+    }
+
     private float spToPixels(Context context, float sp) {
-        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
-        return sp*scaledDensity;
+        return sp * context.getResources().getDisplayMetrics().scaledDensity;
     }
 
     public static class Builder {
         private Context context;
         private Formatter formatter;
-        private int backgroundColor = Color.WHITE;
-        private int separatorColor = Color.TRANSPARENT;
-        private int textColor = Color.BLACK;
-        private int textSize = 20;
-        private int minValue = 1;
-        private int maxValue = 10;
-        private int defaultValue = 1;
+        private int backgroundColor = BACKGROUND_COLOR;
+        private int separatorColor = SEPARATOR_COLOR;
+        private int textColor = TEXT_COLOR;
+        private float textSize = TEXT_SIZE;
+        private int minValue = MIN_VALUE;
+        private int maxValue = MAX_VALUE;
+        private int defaultValue = DEFAULT_VALUE;
         private boolean enableFocusability = false;
         private boolean wrapSelectorWheel = false;
 
@@ -210,7 +265,7 @@ public class MaterialNumberPicker extends NumberPicker {
             return this;
         }
 
-        public Builder textSize(int textSize) {
+        public Builder textSize(float textSize) {
             this.textSize = textSize;
             return this;
         }

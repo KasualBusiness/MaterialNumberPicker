@@ -31,4 +31,15 @@
         style="@style/Button"
         android:text="@string/alert_custom_title"/>
 
+    <biz.kasual.materialnumberpicker.MaterialNumberPicker
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:npMinValue="1"
+        app:npMaxValue="50"
+        app:npDefaultValue="10"
+        app:npSeparatorColor="@color/colorAccent"
+        app:npTextColor="@color/colorPrimary"
+        app:npTextSize="25sp"/>
+
 </LinearLayout>
