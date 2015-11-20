@@ -1,5 +1,9 @@
 # MaterialNumberPicker
-MaterialNumberPicker intends to give you more flexibility than the Holo NumberPicker that only comes with two themes for customization. As many Android developers complained about this component since it was released, this library allows you to access some most wanted private attributes through reflection so that you could easily customize your NumberPicker. Finally, we built on top of it a builder pattern for flexibility reasons.
+This library intends to give you more flexibility than the Holo `NumberPicker` that only comes with two themes for customization.
+
+As many Android developers complained about this component since it was released, this library allows you to access some most wanted private attributes through reflection so that you could easily customize your NumberPicker. This lets you get closer from the `MaterialDesign` guidelines!
+
+Finally, we built on top of it a builder pattern so you can easily create your `MaterialNumberPicker` from XML or programmatically.
 
 ![alt tag](images/picker_presentation.png)
 
@@ -9,7 +13,7 @@ MaterialNumberPicker requires at minimum Android 3.0, same as the native NumberP
 Gradle:
 
 ``
-compile 'biz.kasual:materialnumberpicker:1.1.1'
+compile 'biz.kasual:materialnumberpicker:1.2.0'
 ``
 
 Maven:
@@ -18,18 +22,30 @@ Maven:
 <dependency>
   <groupId>biz.kasual</groupId>
   <artifactId>materialnumberpicker</artifactId>
-  <version>1.1.1</version>
+  <version>1.2.0</version>
   <type>aar</type>
 </dependency>
 ```
 
-Eclipse: [materialnumberpicker-1.1.1.aar](https://github.com/KasualBusiness/MaterialNumberPicker/releases/download/1.1.1/materialnumberpicker-1.1.1.aar)
+Eclipse: [materialnumberpicker-1.2.0.aar](https://github.com/KasualBusiness/MaterialNumberPicker/releases/download/1.2.0/materialnumberpicker-1.2.0.aar)
 
 ## Usage
 
-You can build you number picker by using the following example. It gathers the property currently available with its default values:
+You can either define your `MaterialNumberPicker` via XML or programmatically :
 
-````
+```
+<biz.kasual.materialnumberpicker.MaterialNumberPicker
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:npMinValue="1"
+        app:npMaxValue="50"
+        app:npDefaultValue="10"
+        app:npSeparatorColor="@color/colorAccent"
+        app:npTextColor="@color/colorPrimary"
+        app:npTextSize="25sp"/>
+```
+
+```
 MaterialNumberPicker numberPicker = new MaterialNumberPicker.Builder(context)
                 .minValue(1)
                 .maxValue(10)
@@ -43,7 +59,7 @@ MaterialNumberPicker numberPicker = new MaterialNumberPicker.Builder(context)
                 .build();
 ```
 
-It is up to you how you want to display the picker. A good practise would be to display it inside an AlertDialog:
+The latter option only builds the picker for you. It is up to you how you want to display the picker. You can as well insert it in any `ViewGroup` or inside an `AlertDialog` as a custom view.
 
 ````
 new AlertDialog.Builder(this)
@@ -58,7 +74,7 @@ new AlertDialog.Builder(this)
                 .show();
 ```
 
-By default there is no formatter when you build your number picker but you can easily add one using the `formatter` proprety.
+By default there is no `NumberPicker.Formatter` when you build your `MaterialNumberPicker` but you can easily attach one to it using the `formatter` builder proprety.
 
 ## License
 
