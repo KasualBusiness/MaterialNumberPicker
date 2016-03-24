@@ -12,13 +12,13 @@ MaterialNumberPicker requires at minimum Android 3.0, same as the native NumberP
 
 Gradle:
 
-``
+``groovy
 compile 'biz.kasual:materialnumberpicker:1.2.0'
 ``
 
 Maven:
 
-```
+```xml
 <dependency>
   <groupId>biz.kasual</groupId>
   <artifactId>materialnumberpicker</artifactId>
@@ -33,7 +33,7 @@ Eclipse: [materialnumberpicker-1.2.0.aar](https://github.com/KasualBusiness/Mate
 
 You can either define your `MaterialNumberPicker` via XML or programmatically :
 
-```
+```xml
 <biz.kasual.materialnumberpicker.MaterialNumberPicker
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -45,7 +45,7 @@ You can either define your `MaterialNumberPicker` via XML or programmatically :
         app:npTextSize="25sp"/>
 ```
 
-```
+```java
 MaterialNumberPicker numberPicker = new MaterialNumberPicker.Builder(context)
                 .minValue(1)
                 .maxValue(10)
@@ -61,7 +61,7 @@ MaterialNumberPicker numberPicker = new MaterialNumberPicker.Builder(context)
 
 The latter option only builds the picker for you. It is up to you how you want to display the picker. You can as well insert it in any `ViewGroup` or inside an `AlertDialog` as a custom view.
 
-````
+````java
 new AlertDialog.Builder(this)
                 .setTitle(yourTitle)
                 .setView(numberPicker)
