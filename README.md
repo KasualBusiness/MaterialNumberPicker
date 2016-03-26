@@ -12,9 +12,9 @@ MaterialNumberPicker requires at minimum Android 3.0, same as the native NumberP
 
 Gradle:
 
-``groovy
+```groovy
 compile 'biz.kasual:materialnumberpicker:1.2.0'
-``
+```
 
 Maven:
 
