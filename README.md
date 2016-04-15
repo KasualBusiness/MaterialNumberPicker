@@ -13,7 +13,7 @@ MaterialNumberPicker requires at minimum Android 3.0, same as the native NumberP
 Gradle:
 
 ```groovy
-compile 'biz.kasual:materialnumberpicker:1.2.0'
+compile 'biz.kasual:materialnumberpicker:1.2.1'
 ```
 
 Maven:
@@ -22,12 +22,12 @@ Maven:
 <dependency>
   <groupId>biz.kasual</groupId>
   <artifactId>materialnumberpicker</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <type>aar</type>
 </dependency>
 ```
 
-Eclipse: [materialnumberpicker-1.2.0.aar](https://github.com/KasualBusiness/MaterialNumberPicker/releases/download/1.2.0/materialnumberpicker-1.2.0.aar)
+Eclipse: [materialnumberpicker-1.2.1.aar](https://github.com/KasualBusiness/MaterialNumberPicker/releases/download/1.2.1/materialnumberpicker-1.2.1.aar)
 
 ## Usage
 
@@ -40,6 +40,7 @@ You can either define your `MaterialNumberPicker` via XML or programmatically :
         app:npMinValue="1"
         app:npMaxValue="50"
         app:npDefaultValue="10"
+        app:npBackgroundColor="@color/colorAccent"
         app:npSeparatorColor="@color/colorAccent"
         app:npTextColor="@color/colorPrimary"
         app:npTextSize="25sp"/>
