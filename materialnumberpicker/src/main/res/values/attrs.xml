@@ -8,6 +8,7 @@
         <attr name="npTextSize" format="dimension" />
         <attr name="npTextColor" format="color" />
         <attr name="npSeparatorColor" format="color" />
+        <attr name="npBackgroundColor" format="color" />
         <attr name="npFocusValue" format="boolean" />
         <attr name="npWrapValue" format="boolean" />
     </declare-styleable>

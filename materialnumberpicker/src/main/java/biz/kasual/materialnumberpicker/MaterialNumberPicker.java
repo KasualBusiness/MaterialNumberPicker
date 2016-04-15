@@ -81,6 +81,9 @@ public class MaterialNumberPicker extends NumberPicker {
             else if (attr == R.styleable.MaterialNumberPicker_npSeparatorColor) {
                 setSeparatorColor(a.getColor(attr, SEPARATOR_COLOR));
             }
+            else if (attr == R.styleable.MaterialNumberPicker_npBackgroundColor) {
+                setBackgroundColor(a.getColor(attr, BACKGROUND_COLOR));
+            }
             else if (attr == R.styleable.MaterialNumberPicker_npFocusValue) {
                 setFocusability(a.getBoolean(attr, false));
             }
