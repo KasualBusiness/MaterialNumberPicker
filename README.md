@@ -43,7 +43,8 @@ You can either define your `MaterialNumberPicker` via XML or programmatically :
         app:npBackgroundColor="@color/colorAccent"
         app:npSeparatorColor="@color/colorAccent"
         app:npTextColor="@color/colorPrimary"
-        app:npTextSize="25sp"/>
+        app:npTextSize="25sp"
+        app:npTextStyle="bold"/>
 ```
 
 ```java
@@ -55,6 +56,7 @@ MaterialNumberPicker numberPicker = new MaterialNumberPicker.Builder(context)
                 .separatorColor(Color.TRANSPARENT)
                 .textColor(Color.BLACK)
                 .textSize(20)
+                .textStyle(Typeface.BOLD)
                 .enableFocusability(false)
                 .wrapSelectorWheel(true)
                 .build();
