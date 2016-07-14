@@ -40,6 +40,7 @@
         app:npDefaultValue="10"
         app:npSeparatorColor="@color/colorAccent"
         app:npTextColor="@color/colorPrimary"
-        app:npTextSize="25sp"/>
+        app:npTextSize="25sp"
+        app:npTextStyle="bold"/>
 
 </LinearLayout>

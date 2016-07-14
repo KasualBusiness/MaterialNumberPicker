@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:design:23.1.0'
+    compile 'com.android.support:design:24.0.0'
     compile project(':materialnumberpicker')
     compile fileTree(include: ['*.jar'], dir: 'libs')
 }

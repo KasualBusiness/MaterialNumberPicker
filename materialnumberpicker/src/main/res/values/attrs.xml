@@ -7,6 +7,11 @@
         <attr name="npDefaultValue" format="integer" />
         <attr name="npTextSize" format="dimension" />
         <attr name="npTextColor" format="color" />
+        <attr name="npTextStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
         <attr name="npSeparatorColor" format="color" />
         <attr name="npBackgroundColor" format="color" />
         <attr name="npFocusValue" format="boolean" />
