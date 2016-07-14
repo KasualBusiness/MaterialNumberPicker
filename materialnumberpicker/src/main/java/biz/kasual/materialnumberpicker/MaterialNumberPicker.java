@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.text.InputFilter;
@@ -39,6 +40,7 @@ public class MaterialNumberPicker extends NumberPicker {
     private static final int MAX_VALUE = 10;
     private static final int DEFAULT_VALUE = 1;
     private static final float TEXT_SIZE = 20.f;
+    private static final int TEXT_STYLE = Typeface.NORMAL;
     private static final int TEXT_COLOR = Color.BLACK;
     private static final int BACKGROUND_COLOR = Color.WHITE;
     private static final int SEPARATOR_COLOR = Color.TRANSPARENT;
@@ -46,6 +48,7 @@ public class MaterialNumberPicker extends NumberPicker {
     private Builder mBuilder;
     private int mTextColor;
     private float mTextSize;
+    private int mTextStyle;
     private int mSeparatorColor;
     private boolean mEnableFocusability;
 
@@ -77,6 +80,9 @@ public class MaterialNumberPicker extends NumberPicker {
             }
             else if (attr == R.styleable.MaterialNumberPicker_npTextColor) {
                 setTextColor(a.getColor(attr, TEXT_COLOR));
+            }
+            else if (attr == R.styleable.MaterialNumberPicker_npTextStyle) {
+                setTextStyle(a.getInt(attr, TEXT_STYLE));
             }
             else if (attr == R.styleable.MaterialNumberPicker_npSeparatorColor) {
                 setSeparatorColor(a.getColor(attr, SEPARATOR_COLOR));
@@ -142,6 +148,7 @@ public class MaterialNumberPicker extends NumberPicker {
         setSeparatorColor(SEPARATOR_COLOR);
         setTextColor(TEXT_COLOR);
         setTextSize(TEXT_SIZE);
+        setTextStyle(TEXT_STYLE);
         setWrapSelectorWheel(false);
         setFocusability(false);
 
@@ -192,6 +199,14 @@ public class MaterialNumberPicker extends NumberPicker {
         updateTextAttributes();
     }
 
+    /**
+     * Uses reflection to access text style private attribute for both wheel and edit text inside the number picker.
+     */
+    public void setTextStyle(int textStyle) {
+        mTextStyle = textStyle;
+        updateTextAttributes();
+    }
+
     private void updateTextAttributes() {
         for (int i = 0; i < getChildCount(); i++){
             View child = getChildAt(i);
@@ -203,10 +218,12 @@ public class MaterialNumberPicker extends NumberPicker {
                     Paint wheelPaint = ((Paint)selectorWheelPaintField.get(this));
                     wheelPaint.setColor(mTextColor);
                     wheelPaint.setTextSize(mTextSize);
+                    wheelPaint.setTypeface(Typeface.create(wheelPaint.getTypeface(), mTextStyle));
 
                     EditText editText = ((EditText) child);
                     editText.setTextColor(mTextColor);
                     editText.setTextSize(pixelsToSp(getContext(), mTextSize));
+                    editText.setTypeface(editText.getTypeface(), mTextStyle);
 
                     invalidate();
                     break;
@@ -238,6 +255,7 @@ public class MaterialNumberPicker extends NumberPicker {
         private int separatorColor = SEPARATOR_COLOR;
         private int textColor = TEXT_COLOR;
         private float textSize = TEXT_SIZE;
+        private int textStyle = TEXT_STYLE;
         private int minValue = MIN_VALUE;
         private int maxValue = MAX_VALUE;
         private int defaultValue = DEFAULT_VALUE;
@@ -270,6 +288,11 @@ public class MaterialNumberPicker extends NumberPicker {
 
         public Builder textSize(float textSize) {
             this.textSize = textSize;
+            return this;
+        }
+
+        public Builder textStyle(int textStyle) {
+            this.textStyle = textStyle;
             return this;
         }
 
