@@ -21,7 +21,9 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.View;
@@ -31,7 +33,7 @@ import android.widget.NumberPicker;
 import java.lang.reflect.Field;
 
 /**
- * Created by Stephen Vinouze on 22/09/2015.
+ * Stock {@link NumberPicker} with hooks for customization
  */
 public class MaterialNumberPicker extends NumberPicker {
 
@@ -43,11 +45,23 @@ public class MaterialNumberPicker extends NumberPicker {
     private static final int BACKGROUND_COLOR = Color.WHITE;
     private static final int SEPARATOR_COLOR = Color.TRANSPARENT;
 
+    private static float pixelsToSp(Context context, float px) {
+        return px / context.getResources().getDisplayMetrics().scaledDensity;
+    }
+
+    private static float spToPixels(Context context, float sp) {
+        return sp * context.getResources().getDisplayMetrics().scaledDensity;
+    }
+
     private Builder mBuilder;
     private int mTextColor;
     private float mTextSize;
     private int mSeparatorColor;
     private boolean mEnableFocusability;
+
+    //Cache fields since reflection is kinda slow
+    private Field mPickerDividerField;
+    private Paint mSelectorWheelPaint;
 
     public MaterialNumberPicker(Context context) {
         super(context);
@@ -65,29 +79,21 @@ public class MaterialNumberPicker extends NumberPicker {
             int attr = a.getIndex(i);
             if (attr == R.styleable.MaterialNumberPicker_npMinValue) {
                 setMinValue(a.getInt(attr, MIN_VALUE));
-            }
-            else if (attr == R.styleable.MaterialNumberPicker_npMaxValue) {
+            } else if (attr == R.styleable.MaterialNumberPicker_npMaxValue) {
                 setMaxValue(a.getInt(attr, MAX_VALUE));
-            }
-            else if (attr == R.styleable.MaterialNumberPicker_npDefaultValue) {
+            } else if (attr == R.styleable.MaterialNumberPicker_npDefaultValue) {
                 setValue(a.getInt(attr, DEFAULT_VALUE));
-            }
-            else if (attr == R.styleable.MaterialNumberPicker_npTextSize) {
+            } else if (attr == R.styleable.MaterialNumberPicker_npTextSize) {
                 setTextSize(a.getDimension(attr, TEXT_SIZE));
-            }
-            else if (attr == R.styleable.MaterialNumberPicker_npTextColor) {
+            } else if (attr == R.styleable.MaterialNumberPicker_npTextColor) {
                 setTextColor(a.getColor(attr, TEXT_COLOR));
-            }
-            else if (attr == R.styleable.MaterialNumberPicker_npSeparatorColor) {
+            } else if (attr == R.styleable.MaterialNumberPicker_npSeparatorColor) {
                 setSeparatorColor(a.getColor(attr, SEPARATOR_COLOR));
-            }
-            else if (attr == R.styleable.MaterialNumberPicker_npBackgroundColor) {
+            } else if (attr == R.styleable.MaterialNumberPicker_npBackgroundColor) {
                 setBackgroundColor(a.getColor(attr, BACKGROUND_COLOR));
-            }
-            else if (attr == R.styleable.MaterialNumberPicker_npFocusValue) {
+            } else if (attr == R.styleable.MaterialNumberPicker_npFocusValue) {
                 setFocusability(a.getBoolean(attr, false));
-            }
-            else if (attr == R.styleable.MaterialNumberPicker_npWrapValue) {
+            } else if (attr == R.styleable.MaterialNumberPicker_npWrapValue) {
                 setWrapSelectorWheel(a.getBoolean(attr, false));
             }
         }
@@ -113,14 +119,17 @@ public class MaterialNumberPicker extends NumberPicker {
         setFocusability(builder.enableFocusability);
     }
 
+    @Nullable
     public final Builder getBuilder() {
         return this.mBuilder;
     }
 
+    @ColorInt
     public int getTextColor() {
         return mTextColor;
     }
 
+    @ColorInt
     public int getSeparatorColor() {
         return mSeparatorColor;
     }
@@ -148,32 +157,41 @@ public class MaterialNumberPicker extends NumberPicker {
         try {
             Field f = NumberPicker.class.getDeclaredField("mInputText");
             f.setAccessible(true);
-            EditText inputText = (EditText)f.get(this);
+            EditText inputText = (EditText) f.get(this);
             inputText.setFilters(new InputFilter[0]);
         } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-            e.printStackTrace();
+            //We do not really want to display the errors, since we are a lib
         }
     }
 
     /**
      * Uses reflection to access divider private attribute and override its color
      * Use Color.Transparent if you wish to hide them
+     *
+     * @return true if separator set, false if field was not accessible
      */
-    public void setSeparatorColor(int separatorColor) {
+    public boolean setSeparatorColor(int separatorColor) {
         mSeparatorColor = separatorColor;
-
-        Field[] pickerFields = NumberPicker.class.getDeclaredFields();
-        for (Field pf : pickerFields) {
-            if (pf.getName().equals("mSelectionDivider")) {
-                pf.setAccessible(true);
-                try {
-                    pf.set(this, new ColorDrawable(separatorColor));
-                } catch (IllegalAccessException | IllegalArgumentException e) {
-                    e.printStackTrace();
+        if (mPickerDividerField == null) {
+            Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+            for (Field pf : pickerFields) {
+                if (pf.getName().equals("mSelectionDivider")) {
+                    pf.setAccessible(true);
+                    mPickerDividerField = pf;
+                    break;
                 }
-                break;
             }
         }
+        if (mPickerDividerField != null) {
+            try {
+                mPickerDividerField.set(this, new ColorDrawable(separatorColor));
+            } catch (IllegalAccessException | IllegalArgumentException e) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -193,42 +211,44 @@ public class MaterialNumberPicker extends NumberPicker {
     }
 
     private void updateTextAttributes() {
-        for (int i = 0; i < getChildCount(); i++){
+
+        updateSelectorWheelPaint();
+
+        for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             if (child instanceof EditText) {
-                try {
-                    Field selectorWheelPaintField = NumberPicker.class.getDeclaredField("mSelectorWheelPaint");
-                    selectorWheelPaintField.setAccessible(true);
-
-                    Paint wheelPaint = ((Paint)selectorWheelPaintField.get(this));
-                    wheelPaint.setColor(mTextColor);
-                    wheelPaint.setTextSize(mTextSize);
-
-                    EditText editText = ((EditText) child);
-                    editText.setTextColor(mTextColor);
-                    editText.setTextSize(pixelsToSp(getContext(), mTextSize));
-
-                    invalidate();
-                    break;
-                }
-                catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-                    e.printStackTrace();
-                }
+                EditText editText = ((EditText) child);
+                editText.setTextColor(mTextColor);
+                editText.setTextSize(pixelsToSp(getContext(), mTextSize));
+                editText.invalidate();
             }
         }
+    }
+
+    private boolean updateSelectorWheelPaint() {
+        if (mSelectorWheelPaint == null) {
+            try {
+                Field selectorWheelPaintField = NumberPicker.class.getDeclaredField("mSelectorWheelPaint");
+                selectorWheelPaintField.setAccessible(true);
+
+                mSelectorWheelPaint = ((Paint) selectorWheelPaintField.get(this));
+            } catch (Exception e) {
+                return false;
+            }
+
+        }
+        if (mSelectorWheelPaint != null) {
+            mSelectorWheelPaint.setColor(mTextColor);
+            mSelectorWheelPaint.setTextSize(mTextSize);
+            invalidate();
+            return true;
+        }
+        return false;
     }
 
     private void setFocusability(boolean isFocusable) {
         mEnableFocusability = isFocusable;
         setDescendantFocusability(isFocusable ? FOCUS_AFTER_DESCENDANTS : FOCUS_BLOCK_DESCENDANTS);
-    }
-
-    private float pixelsToSp(Context context, float px) {
-        return px / context.getResources().getDisplayMetrics().scaledDensity;
-    }
-
-    private float spToPixels(Context context, float sp) {
-        return sp * context.getResources().getDisplayMetrics().scaledDensity;
     }
 
     public static class Builder {
